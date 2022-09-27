@@ -6,11 +6,30 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
-using AppLovinMax.ThirdParty.MiniJson; 
+using AppLovinMax.ThirdParty.MiniJson;
 
 public class MaxSdkCallbacks : MonoBehaviour
 {
-    public static MaxSdkCallbacks Instance { get; private set; }
+#if UNITY_EDITOR
+    private static MaxSdkCallbacks instance;
+#endif
+
+    public static MaxSdkCallbacks Instance
+    {
+#if UNITY_EDITOR
+        get
+        {
+            if (instance != null) return instance;
+
+            instance = new GameObject("MaxSdkCallbacks", typeof(MaxSdkCallbacks)).GetComponent<MaxSdkCallbacks>();
+            DontDestroyOnLoad(instance);
+
+            return instance;
+        }
+#else
+        get; private set;
+#endif
+    }
 
     // Fired when the SDK has finished initializing
     private static Action<MaxSdkBase.SdkConfiguration> _onSdkInitializedEvent;
@@ -1210,6 +1229,7 @@ public class MaxSdkCallbacks : MonoBehaviour
         }
     }
 
+#if !UNITY_EDITOR
     void Awake()
     {
         if (Instance == null)
@@ -1218,6 +1238,7 @@ public class MaxSdkCallbacks : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
+#endif
 
     public void ForwardEvent(string eventPropsStr)
     {
@@ -1510,7 +1531,7 @@ public class MaxSdkCallbacks : MonoBehaviour
 #if UNITY_EDITOR
     public static void EmitSdkInitializedEvent()
     {
-        if(_onSdkInitializedEvent == null) return;
+        if (_onSdkInitializedEvent == null) return;
 
         var sdkConfiguration = new MaxSdkBase.SdkConfiguration();
         sdkConfiguration.IsSuccessfullyInitialized = true;

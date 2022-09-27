@@ -42,9 +42,11 @@ public class MaxSdkUnityEditor : MaxSdkBase
         get { return MaxUserServiceUnityEditor.Instance; }
     }
 
-    static MaxSdkUnityEditor()
+    [RuntimeInitializeOnLoadMethod]
+    public static void InitializeMaxSdkUnityEditorOnLoad()
     {
-        InitCallbacks();
+        // Unity destroys the stub banners each time the editor exits play mode, but the StubBanners stays in memory if Enter Play Mode settings is enabled.
+        StubBanners.Clear();
     }
 
     /// <summary>
