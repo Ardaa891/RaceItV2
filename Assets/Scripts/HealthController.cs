@@ -14,7 +14,7 @@ public class HealthController : MonoBehaviour
     
     void Start()
     {
-        
+        Current = this;
         
     }
 

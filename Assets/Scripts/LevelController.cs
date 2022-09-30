@@ -20,6 +20,8 @@ public class LevelController : MonoBehaviour
     public TextMeshProUGUI earnedMoneyText;
     public float earnedMoney;
 
+     bool ad;
+
 
     [Space]
     [Space]
@@ -132,8 +134,12 @@ public class LevelController : MonoBehaviour
         //GameObject.FindGameObjectWithTag("AI").GetComponent<Rigidbody>().velocity = Vector3.zero;
         earnedMoneyText.text = "$ " + "0";
         MMVibrationManager.Haptic(HapticTypes.Failure);
-
-        InterstitialsManager.Current.ShowInterstitial();
+        if (!ad)
+        {
+            InterstitialsManager.Current.ShowInterstitial();
+            ad = true;
+        }
+       
 
     }
 

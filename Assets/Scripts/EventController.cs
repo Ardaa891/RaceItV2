@@ -138,7 +138,17 @@ public class EventController : MonoBehaviour
             //InvokeRepeating("TurnOnMeshes", 0.25f, 0.25f);
             transform.DOScale(0, 0.1f).SetDelay(0.2f).SetEase(Ease.InOutSine).SetLoops(6, LoopType.Yoyo);
             MMVibrationManager.Haptic(HapticTypes.HeavyImpact);
-            StartCoroutine(TransformCar());
+
+            if(HealthController.Current.hitCount < 3)
+            {
+                StartCoroutine(TransformCar());
+            }
+            else
+            {
+                LevelController.Current.GameOver();
+            }
+
+            
 
             //StartCoroutine(Crash());
 
@@ -222,7 +232,7 @@ public class EventController : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(0.2f);
 
-        if (crashed)
+        if (crashed && HealthController.Current.hitCount < 3)
         {
             
             float timePassed = 0;
@@ -247,13 +257,12 @@ public class EventController : MonoBehaviour
             GetComponent<BoxCollider>().enabled = true;
             crashed = false;
 
-            //yield return new WaitForSecondsRealtime(0.4f);
-            //GetComponent<BoxCollider>().enabled = true;
-            //crashed = false;
 
-            
+
+
 
         }
+       
 
         
 
